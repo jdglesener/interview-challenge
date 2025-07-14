@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="color-grid" class="container mt-4"></div>
+
+  <script>
+    async function fetchColorDetails(hex) {
+      const response = await fetchColors();
+      const data = await response.json();
+      const colorDetails = document.getElementById('color-details');
+
+      const colorCard = document.createElement('div');
+      colorCard.className = 'card';
+      colorCard.innerHTML = `
+        <div class="card-body">
+          <h5 class="card-title">Hex: ${data.color.hex}</h5>
+          <p class="card-text">Category: ${data.color.category}</p>
+          <h6>Alpha Levels:</h6>
+          <ul>
+            ${data.alphaLevels.map(level => `<li>${level.rgba}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+      colorDetails.appendChild(colorCard);
+    }
+
+    fetchColorDetails('1CA9C9'); // Example hex code
+  </script>
+  <script type="module" src = "app.js"></script>
+  something
+</body>
+</html>
