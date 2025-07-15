@@ -66,11 +66,11 @@ function renderColorDetails(hex) {
           </div>
       <div class="d-flex flex-wrap justify-content-center">
       ${[1, 0.8, 0.6, 0.4, 0.2].map(alpha => {
-        return `<div class="card m-1 shadow-sm">
+    return `<div class="card m-1 shadow-sm">
               <div class="card-top small-swatch p-0" style="background-color: ${hexToRgba(hex, alpha)}"></div>
               <p class="card-body text-center mr-5 ml-1 p-0">${hex} alpha:${alpha}</p>
             </div>`;
-      }).join('')}
+  }).join('')}
       </div>
     <div class="d-flex justify-content-center my-3">
             <button id="clearView" class="btn px-5" style="background-color: white; border-color: black;">
@@ -80,11 +80,11 @@ function renderColorDetails(hex) {
   `;
   const clearButton = document.getElementById("clearView");
   clearButton.addEventListener("click", () => {
-  // Set initial button text and view states
-    detailView.style.display ="none";
+    // Set initial button text and view states
+    detailView.style.display = "none";
     listView.style.display = "block";
-    clearButton.style.display ="none";
-});
+    clearButton.style.display = "none";
+  });
 
 }
 
@@ -100,13 +100,28 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAllColors(currentPage);
 });
 
-  const detailView = document.getElementById("detail-view");
-  const listView = document.getElementById("color-container");
+const detailView = document.getElementById("detail-view");
+const listView = document.getElementById("color-container");
 
 
 
 window.addEventListener("DOMContentLoaded", () => {
-  detailView.style.display = "none";
-  listView.style.display = "block";
+  detailView.style.display = "none";
+  listView.style.display = "block";
 });
+
+const randomButton = document.getElementById("randomButton")
+
+randomButton.addEventListener("click", async () => {
+  try {
+    const res = await fetch(`/api/colors/random`);
+    if (!res.ok) throw new Error('Failed to fetch random color');
+    
+    const color = await res.json();
+    renderColorDetails(color.hex);
+  } catch (err) {
+    console.error('Error fetching random color:', err);
+  }
+});
+
 

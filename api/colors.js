@@ -2,6 +2,20 @@ const express = require('express');
 const router = express.Router();
 const Color = require('../models/Color');
 
+router.get('/random', async (req, res) => {
+  console.log('colors.js router loaded');
+  try {
+    console.log('Fetching Random Color...')
+    const [randomColor] = await Color.aggregate([{ $sample: { size: 1 } }]);
+    if (!randomColor) {
+      return res.status(404).json({ error: 'No colors found' });
+    }
+    res.json(randomColor);
+  } catch (err) {
+    console.error('Random color error:', err);
+    res.status(500).json({ error: 'Failed to fetch random color' });
+  }
+});
 // GET all colors
 router.get('/', async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -28,17 +42,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET a specific color by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const color = await Color.findById(req.params.id);
-    if (!color) return res.status(404).json({ error: 'Color not found' });
-    res.json(color);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch color' });
-  }
-});
-
 // POST a new color
 router.post('/', async (req, res) => {
   try {
@@ -49,7 +52,6 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: 'Failed to save color' });
   }
 });
-
 
 
 module.exports = router;
