@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-
+const uri = "mongodb+srv://jordanglesener:xH2OMZiodsek8r11@cluster0.jf95r9h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // 🔗 Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/colorpicker', {
+mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

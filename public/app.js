@@ -18,7 +18,7 @@ async function renderAllColors(page = 1) {
       card.innerHTML = `
         <div class="card-top small-swatch shadow-sm" style="background-color: ${color.hex};"></div>
         <div class="card-body text-start">
-          <p class="text-start mx-5">${color.hex}</p>
+          <p class="text-start mx-2">${color.hex}</p>
         </div>
       `;
       card.onclick = () => renderColorDetails(color.hex);
@@ -48,18 +48,44 @@ function renderPagination(totalPages, activePage) {
   }
 }
 function renderColorDetails(hex) {
-  const area = document.getElementById('selected-color-area');
-  area.style.display = 'block';
-  area.innerHTML = `
-    <h5 class="mb-3">Selected Color: ${hex}</h5>
-      <div class="large-swatch mx-2 mb-2" style="background-color: ${hex};"></div>
-      <div class="d-flex flex-wrap align-items-center">
+  console.log(hex);
+
+
+  const listView = document.getElementById('list-view');
+  const detailView = document.getElementById('detail-view');
+
+  listView.style.display = 'none';
+  detailView.style.display = 'block';
+
+  detailView.innerHTML = `
+          <div class="d-flex flex-wrap justify-content-center">
+            <div class="card mx-3 border-dark rounded-3" style="width: 810px;">
+              <div class="card-top large-swatch" style= "background-color: ${hex}"></div>
+              <div class="card-body my-2">${hex}</div>
+            </div>
+          </div>
+      <div class="d-flex flex-wrap justify-content-center">
       ${[1, 0.8, 0.6, 0.4, 0.2].map(alpha => {
-        return `<div class="smol-swatch mx-2 mb-2" style="background-color: ${hexToRgba(hex, alpha)};"></div>`;
+        return `<div class="card m-1 shadow-sm">
+              <div class="card-top small-swatch p-0" style="background-color: ${hexToRgba(hex, alpha)}"></div>
+              <p class="card-body text-center mr-5 ml-1 p-0">${hex} alpha:${alpha}</p>
+            </div>`;
       }).join('')}
-    </div>
+      </div>
+    <div class="d-flex justify-content-center my-3">
+            <button id="clearView" class="btn px-5" style="background-color: white; border-color: black;">
+              <b>Clear</b>
+            </button>
+          </div>
   `;
-  document.getElementById('color-container').style.display = 'none';
+  const clearButton = document.getElementById("clearView");
+  clearButton.addEventListener("click", () => {
+  // Set initial button text and view states
+    detailView.style.display ="none";
+    listView.style.display = "block";
+    clearButton.style.display ="none";
+});
+
 }
 
 function hexToRgba(hex, alpha) {
@@ -73,3 +99,14 @@ function hexToRgba(hex, alpha) {
 document.addEventListener('DOMContentLoaded', () => {
   renderAllColors(currentPage);
 });
+
+  const detailView = document.getElementById("detail-view");
+  const listView = document.getElementById("color-container");
+
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  detailView.style.display = "none";
+  listView.style.display = "block";
+});
+
